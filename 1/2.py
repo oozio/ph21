@@ -1,0 +1,35 @@
+from astropy.io.votable import parse_single_table
+import urllib, urllib2
+import string
+import re
+import matplotlib.pyplot as plt
+
+url = 'http://nesssi.cacr.caltech.edu/cgi-bin/getcssconedbid_release2.cgi'
+values = {'Name' : 'HER X-1',
+          'Rad' : 0.3 ,
+          'OUT' : 'vot',
+          'DB' : "photcat",
+          'SHORT' : 'long'}
+
+          
+data = urllib.urlencode(values)
+data = data.encode('ascii') # data should be bytes
+req = urllib2.Request(url, data)
+response = urllib2.urlopen(req)
+the_page = response.read()
+
+
+xml = the_page.split("(right-mouse-click and save as to <a href=")[1].split(">download")[0]
+
+table = parse_single_table(xml)
+
+mag = table.array['Mag']
+magerr = table.array['Magerr']
+mjd = table.array['ObsTime']
+
+plt.figure()
+plt.title('Light Curves')
+plt.xlabel('Time (MJD)')
+plt.ylabel('Magnitude')
+plt.errorbar(mjd, mag,yerr=magerr, fmt='o',ecolor='r',markersize=2,color='b',capthick=2)
+plt.savefig('2.pdf')
