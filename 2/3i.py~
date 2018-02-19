@@ -7,29 +7,30 @@ from scipy.fftpack import fft
 import numpy as np 
 
 
-N = 10000.
-T = 0.001
-time = np.linspace(0.00, N*T, N)
-#plt.plot(time, ff)
-#plt.show()
-
 c = 1
 a = 2
 f = 3
 b = 4
-L = 5
+L = 500
 phi = np.pi
 
+time = np.linspace(0.00, L, L)
+#plt.plot(time, ff)
+#plt.show()
+
+
+
 #dt = np.linspace(0,5,5)
-gauss = a*np.exp(-b*(time-L/2)/2.)
+gauss = a*np.exp(-b*(time-L/2)**2.)
 cosines = c+ a*np.cos(f*time + phi)
-g = fft(gauss)
-c = fft(cosines)
 
-
-plt.subplot(2, 1, 1)
-plt.plot(time, g)
-plt.subplot(2, 1, 2)
-plt.plot(time, c)
+for i in [gauss,cosines]:
+     ff = np.fft.fft(i)
+     fi = np.fft.ifft(ff)
+     f = np.fft.fftfreq(len(time),L)
+     plt.subplot(2, 1, 1)
+     plt.plot(f, ff.real)
+     plt.subplot(2, 1, 2)
+     plt.plot(f, fi.real)
 plt.show()
 

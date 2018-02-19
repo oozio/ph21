@@ -2,8 +2,6 @@ import urllib, urllib2
 import string
 import re
 import matplotlib.pyplot as plt
-import scipy.signal as signal
-from scipy.fftpack import fft
 import numpy as np 
 
 url = 'http://nesssi.cacr.caltech.edu/cgi-bin/getcssconedbid_release2.cgi'
@@ -24,31 +22,24 @@ values = []
 with open('/home/helen/PH21/2/arecibo1.txt','r+') as f:
      for i in f:
           values.append(float(i))
-               
-f = fft(values)
-ff = fft(values)
-maxf = max(f)
-maxi = np.where(f == maxf)
-print max(np.delete(f,maxi))
+  
+T = 0.001    
+f = np.fft.fftfreq(len(values))
+ff = np.fft.fft(values).real * T
+maxi = np.where(ff == max(ff))
+maxf = f[maxi]
 N = f.size
-T = 0.001
-time = np.linspace(0.00, N*T, N)
-#plt.plot(time, ff)
+
+time = np.linspace(0.00, N, N)
+plt.plot(f, ff)
 #plt.show()
 
+t0 = N/2
+for dt in range(t0, 0, -t0/4):
+     g = np.exp(-(t-t0)**2/dt**2)
+     fg = np.fft.fft(g)
+     plt.plot(f+maxf,fg.real)
+    
 
-t0 = maxf
-dt = 0.00005
-#dt = .00002
-#dt = np.linspace(0.01,10.,N)
-gauss = np.exp(-(time-t0)**2/dt**2)
-sines = np.sin(time)
-g = fft(gauss)
-s = fft(sines)
-
-gs = signal.fftconvolve(gauss,sines,mode='same')
-gs = fft(gs)
-plt.plot(time, gs, 'r+')
-#plt.plot(time, ff, 'b+')
 plt.show()
 
