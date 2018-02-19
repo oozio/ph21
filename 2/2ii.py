@@ -32,14 +32,16 @@ N = f.size
 
 time = np.linspace(0.00, N, N)
 plt.plot(f, ff)
-#plt.show()
+plt.xlim(xmin=0)
+plt.show()
 
 t0 = N/2
+plt.plot(f,ff)
+
 for dt in range(t0, 0, -t0/4):
      g = np.exp(-(time-t0)**2/dt**2)
      fg = np.fft.fft(g)
      plt.plot(f+maxf,fg.real)
     
-
 plt.show()
 

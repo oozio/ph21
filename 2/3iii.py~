@@ -1,4 +1,5 @@
-import urllib, urllib2
+#import urllib, urllib2
+import urllib
 import string
 import re
 import matplotlib.pyplot as plt
@@ -13,10 +14,13 @@ values = {'Name' : 'HER X-1',
           'SHORT' : 'long'}
 
           
-data = urllib.urlencode(values)
+#data = urllib.urlencode(values)
+data = urllib.parse.urlencode(values)
 data = data.encode('ascii') # data should be bytes
-req = urllib2.Request(url, data)
-response = urllib2.urlopen(req)
+#req = urllib2.Request(url, data)
+#req = urllib.request(url,data)
+#response = urllib2.urlopen(req)
+response = urllib.request.urlopen(url,data)
 the_page = response.read()
 
 mjd = []
@@ -34,11 +38,13 @@ with open('/home/helen/PH21/1/response.txt','r+') as f:
              #  print 'magerr'+str(magerr)
                mjd.append(float(nums[6].rstrip('</tr>').strip("'")))
               # print 'mjd'+str(mjd)
-               
-freq = np.linspace(0.01, 10., 1000000)
-pgram = signal.lombscargle(mjd, mag, freq, normalize=True)
+          
+          
 
-a = []
+freq = np.fft.fftfreq(int(mjd[-1] - mjd[0]))
+#pgram = signal.lombscargle(mjd, mag, 2*np.pi*freq, normalize=True)
+pgram = signal.lombscargle(mjd, mag, 2*np.pi*freq)
+
 plt.plot(freq, pgram)
 plt.show()
 
