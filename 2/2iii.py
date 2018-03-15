@@ -29,7 +29,7 @@ magerr = []
 with open('/home/helen/PH21/1/response.txt','r+') as f:
  #    f.write(the_page)
   #   f.flush()
-     for i in f:
+     for i in   f:
           if re.match('^<tr>',i):
                nums = i.strip().split('<td>')
                mag.append(float(nums[2].strip("'")))

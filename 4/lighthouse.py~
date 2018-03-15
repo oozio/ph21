@@ -3,29 +3,30 @@ from scipy import special
 from scipy.stats import cauchy
 import matplotlib.pyplot as plt
 
+def hit(n,a,b):
+    h = np.tan(np.random.uniform(low=np.pi/2., high=3*np.pi/2., size=n))*b+a
+    return h
 
-n = 500
-a = 1000.
-b = 1000.
+def lighthouse_prob(h,a,b,prior):
+     logHD = []
+     for hit in h:
+          logHD.append(np.sum(np.log((b/(2*np.pi))/((hit - a)**2 + b**2))) + np.log(prior))
+     return logHD
 
-xks = np.tan(np.random.uniform(low=-np.pi/2., high=np.pi/2., size=n))*b+a
+a = 1.
+b = 1.5
 
-prior = 1./a
+prior = 1
+points =300
+#logHD = np.log( special.binom(n,h) * true_prob*h*(1-true_prob)**(n-h) ) + np.log(prior)
 
-logHD = []
-c = b/np.pi * ((xks-a)**2+b**2)
-
-logHD = ( np.log(c) + np.log(prior)          )
-print np.exp(np.mean(logHD))
-print np.exp(np.median(logHD))
-
-h = np.linspace(1, a, a)     
-plt.plot(h[::2], logHD, 'r+')
-#plt.title("n="+str(n))
-plt.ylabel("prob H|D")
-plt.xlabel("a")
-#plt.savefig('H='+str(true_prob)+";n="+str(n)+'.jpg')
-plt.show()
+for n in [2**n for n in range(0,10)]:  
+     h = hit(n,a,b)
+     p_grid = np.arange(0., 1., 1. / points)
+     posterior_grid = [lighthouse_prob(h,p,b,prior) for p in p_grid]
+     posterior_grid -= np.max(posterior_grid) # normalize
+     plt.plot(p_grid, posterior_grid)
+plt.show()     
 
 
 # The mean is not a good estimator since the Central Limit Theorem doesn't apply to Cauchy distributions, 

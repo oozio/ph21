@@ -1,5 +1,5 @@
 #assignment 3 code
-from PIL import Image,ImageFilter
+from PIL import Image,ImageFilter,ImageEnhance
 import requests
 from StringIO import StringIO
 import numpy as np
@@ -8,14 +8,20 @@ import matplotlib.pyplot as plt
 import matplotlib.cm
 from skimage.color import rgb2gray
 
+#comments duplicated in latex file
+
 
 #3.1; import image from internet
-imurl = requests.get("http://www.vancitymommyd.com/wp-content/uploads/2018/01/pokemon-clipart-pokemon-clip-art-clipart-wikiclipart-school-clipart.png")
-name = 'pikachu'
+#imurl = requests.get("http://www.vancitymommyd.com/wp-content/uploads/2018/01/pokemon-clipart-pokemon-clip-art-clipart-wikiclipart-school-clipart.png")
+#imurl = requests.get("https://static2.bigstockphoto.com/5/6/1/large1500/165032504.jpg")
+imurl = requests.get("https://animalsaustralia-api.org/cached/image/1000sheep3.jpg")
+name = 'sheep'
 
 #3.2; open image, print some properties
 im = Image.open(StringIO(imurl.content))
-
+#im.save('pikachu/pikachu.png')
+#im.save('sheep/sheep.png')
+im.save('sheep.png')
 c,d = im.size
 print 'image width: '+str(c)+ '; image height: ' + str(d)
 print 'image mode: '+str(im.mode)
@@ -24,20 +30,22 @@ print 'image mode: '+str(im.mode)
 im_edges = im.filter(ImageFilter.FIND_EDGES)
 
 #3.4; blur, convert to grayscale, and get brightnesses for crisper edges
-im = im.filter(ImageFilter.GaussianBlur(radius=1.5))
+#im = im.filter(ImageFilter.GaussianBlur(radius=1.5))
 im = im.convert('LA')
 pxs = list(im.getdata())
 px_val = [pxs[(n*c):((n+1)*c)] for n in range(d)]
 brightness = [[sum(px) for px in row] for row in px_val]
 
 #im_edges.show()
-#im_edges.save(name+'_FIND_EDGES_demo.png','PNG')
+im_edges.save(name+'_FIND_EDGES_demo.png','PNG')
 
 #3.5; edge detect using gaussian gradient with different widths
 for width in np.arange(0.1, 2,0.5):
      edge = ndimage.filters.gaussian_gradient_magnitude(brightness,width)
      #is using a builtin gaussian gradient ok?
      im_edge = Image.fromarray(edge.astype('uint8'))
+     a = ImageEnhance.Brightness(im_edge)
+     a.enhance(3).show() 
      im_edge.save(name+'_width_'+str(width.round(decimals=1))+'.png','PNG')
 
 #3.6
