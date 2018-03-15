@@ -24,6 +24,7 @@ for n in [2**n for n in range(0,10)]:
      p_grid = np.arange(0., 1., 1. / points)
      posterior_grid = [coin_prob(h,prior,p) for p in p_grid]
      posterior_grid -= np.max(posterior_grid) # normalize
+     print len(posterior_grid)
      plt.plot(p_grid, posterior_grid)
 plt.show()     
 #plt.savefig('H='+str(true_prob)+";n="+str(n)+'.jpg')

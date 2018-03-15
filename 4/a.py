@@ -116,23 +116,7 @@ def plot_2dposterior(posterior, p1_min, p1_max, p2_min, p2_max,
 
 if __name__ == "__main__":
 
-    # COIN TOSSING
-
-    # real parameter value
     H = 0.38
-
-    # priors
-    prior_uniform = lambda H: 1
-    prior_fair = lambda H: np.exp( -(H - 0.5)**2 / (2 * 0.1**2) )
-    prior_veryfair = lambda H: np.exp( -(H - 0.5)**2 / (2 * 0.05**2) )
-
-    for prior in [prior_uniform, prior_fair, prior_veryfair]:
-        for n in [2, 5, 10, 250]:
-            data = gen_coin_data(n, H)
-            log_posterior = calc_coin_logposterior(data, prior)
-            plot_1dposterior(log_posterior, 0, 1,
-                plot_label = "$H$ = %f, $n$ = %i" % (H, n))
-        plotter.show()
 
     # LIGHTHOUSE, ALPHA
 
@@ -145,15 +129,6 @@ if __name__ == "__main__":
     prior_wide = lambda alpha: np.exp( -(H - 1.5)**2 / (2 * 0.3**2) )
     prior_narrow = lambda H: np.exp( -(H - 1.5)**2 / (2 * 0.1**2) )
 
-    for prior in [prior_uniform, prior_wide, prior_narrow]:
-        for n in [10, 20, 50, 250]:
-            data = gen_lighthouse_data(n, alpha, beta)
-            log_posterior = calc_lighthouse_log1dposterior(data, prior, beta)
-            plot_1dposterior(log_posterior, 0, 2,
-                plot_label = ("$\\alpha$ = %f, $\\beta$ = %f, $n$ = %i"
-                % (alpha, beta, n))
-            )
-        plotter.show()
 
     # LIGHTHOUSE, ALPHA AND BETA
 
@@ -168,3 +143,10 @@ if __name__ == "__main__":
                 % (alpha, beta, n))
             )
             plotter.show()
+            
+            
+            
+            
+            
+            
+            
