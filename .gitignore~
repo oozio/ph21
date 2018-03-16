@@ -1,0 +1,8 @@
+*.pyc
+*.toc
+*.aux
+*.fdb_latexmk
+*.log
+*.fls
+*.py~
+*.tex~

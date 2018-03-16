@@ -14,11 +14,11 @@ b = 1.5
 
 
 # Priors on unknown parameters:a 
-#unif = pymc.Uniform('unif',lower=0.0,upper=1.0)
-gauss = pymc.Normal('gauss', mu=0.5, tau=1/.01**2)
+unif = pymc.Uniform('unif',lower=0.5,upper=1.5)
+gauss = pymc.Normal('gauss', mu=1.0, tau=1/.01**2)
 
-pa = gauss
-pb = gauss
+pa = unif
+pb = unif
 h = hit(n,a,b)
 
 # Binomial likelihood for data

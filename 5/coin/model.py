@@ -11,13 +11,13 @@ def heads(n, true_prob):
 
 # Some data
 n = 300
-true_prob = 0.5
+true_prob = 0.4
 
 # Priors on unknown parameters
-#unif = pymc.Uniform('unif',lower=0.0,upper=1.0)
-gauss = pymc.Normal('gauss', mu=0.5, tau=1/.01**2)
+unif = pymc.Uniform('unif',lower=0.3,upper=0.5)
+gauss = pymc.Normal('gauss', mu=0.4, tau=1/.01**2)
 
-p = gauss
+p = unif
 h = heads(n,true_prob)
 # Binomial likelihood for data
 hh = pymc.Binomial('heads', n=n, p=p, value=h,observed=True)
