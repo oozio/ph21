@@ -1,11 +1,13 @@
-#import urllib, urllib2
-import urllib
+import urllib, urllib2
+#import urllib
 import string
 import re
 import matplotlib.pyplot as plt
 import scipy.signal as signal
 import numpy as np
-
+from astropy.stats import LombScargle
+from astropy import units as u
+from astropy.time import Time
 url = 'http://nesssi.cacr.caltech.edu/cgi-bin/getcssconedbid_release2.cgi'
 values = {'Name' : 'HER X-1',
           'Rad' : 0.3 ,
@@ -14,13 +16,13 @@ values = {'Name' : 'HER X-1',
           'SHORT' : 'long'}
 
           
-#data = urllib.urlencode(values)
-data = urllib.parse.urlencode(values)
-data = data.encode('ascii') # data should be bytes
-#req = urllib2.Request(url, data)
+data = urllib.urlencode(values)
+#data = urllib.parse.urlencode(values)
+#data = data.encode('ascii') # data should be bytes
+req = urllib2.Request(url, data)
 #req = urllib.request(url,data)
-#response = urllib2.urlopen(req)
-response = urllib.request.urlopen(url,data)
+response = urllib2.urlopen(req)
+#response = urllib.request.urlopen(url,data)
 the_page = response.read()
 
 mjd = []
@@ -42,13 +44,49 @@ with open('/home/helen/PH21/1/response.txt','r+') as f:
           
 mjd = np.array(mjd)
 mag = np.array(mag)
-freq = np.fft.fftfreq(int(mjd[-1] - mjd[0]))
-#pgram = signal.lombscargle(mjd, mag, 2*np.pi*freq, normalize=True)
-pgram = signal.lombscargle(mjd, mag, 2*np.pi*freq)
+#mjd = Time(mjd,format='mjd')
+#mjd = mjd.gps
+frequency = np.linspace(0.4, 0.6, 1000)
+power = LombScargle(mjd, mag,magerr).power(frequency)
+#print frequency[np.argmax(power)]  
 
-plt.plot(freq, pgram)
-plt.show()
+#plt.plot(frequency, power)
+#plt.xlabel('freq')
+#plt.ylabel('power')
+#plt.savefig('uneven.png')
+
+c = 1
+a = 2
+f = 3
+b = 0.4
+L = 50
+phi = np.pi
 
 
+frequency = np.linspace(0.9, 1.1, 1000)
+time = np.arange(0., L, b)
+gauss = a*np.exp(-b*(time-(L/2))**2)+1
+power = LombScargle(gauss, time).power(frequency)
    
+#plt.plot(frequency, power)
+#plt.xlabel('freq')
+#plt.ylabel('power')
+#plt.savefig('gauss.png')
+
+ns =[]
+with open('/home/helen/PH21/2/arecibo1.txt','r+') as f:
+     for i in f:
+          ns.append(float(i))
+frequency = np.linspace(0.9, 1.1, 1000)
+N = len(ns)
+time = np.linspace(0.00, N, N)
+power = LombScargle(ns, time).power(frequency)
+   
+plt.plot(frequency, power)
+plt.xlabel('freq')
+plt.ylabel('power')
+plt.savefig('arescibo.png')
+
+
+
 

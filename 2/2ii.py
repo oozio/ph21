@@ -24,24 +24,28 @@ with open('/home/helen/PH21/2/arecibo1.txt','r+') as f:
           values.append(float(i))
   
 T = 0.001    
-f = np.fft.fftfreq(len(values))
-ff = np.fft.fft(values).real * T
+f = np.fft.fftfreq(len(values))*T
+ff = np.fft.fft(values).real 
 maxi = np.where(ff == max(ff))
 maxf = f[maxi]
 N = f.size
 
 time = np.linspace(0.00, N, N)
-plt.plot(f, ff)
-plt.xlim(xmin=0)
-plt.show()
+#plt.plot(f, ff)
+#plt.xlim(xmin=0)
+#plt.show()
 
 t0 = N/2
-plt.plot(f,ff)
+#plt.plot(f,ff,label='original')
 
 for dt in range(t0, 0, -t0/4):
      g = np.exp(-(time-t0)**2/dt**2)
      fg = np.fft.fft(g)
-     plt.plot(f+maxf,fg.real)
-    
+     plt.plot(f+maxf,fg.real,label='dt='+str(dt))
+
+plt.plot(f,ff,label='original')
+#plt.xlim(-0.13720,-0.137685)
+#plt.ylim(-5000.,20000.)
+plt.legend()
 plt.show()
 
