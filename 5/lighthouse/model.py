@@ -12,14 +12,14 @@ n = 300
 a = 1.
 b = 1.5
 
-
 # Priors on unknown parameters:a 
-unif = pymc.Uniform('unif',lower=0.5,upper=1.5)
-gauss = pymc.Normal('gauss', mu=1.0, tau=1/.01**2)
+alpha = pymc.Uniform('pa',lower=0.0,upper=2.0)
+#alpha = pymc.Normal('pa', mu=1.0, tau=1/.3**2)
 
-pa = unif
-pb = unif
+beta = pymc.Uniform('pb',lower=0.0,upper=2.0)
+#beta = pymc.Normal('pb', mu=1.0, tau=1/.3**2)
+
 h = hit(n,a,b)
 
 # Binomial likelihood for data
-hh = pymc.Cauchy('hits', alpha = pa, beta = pb, value = h, observed=True)
+hh = pymc.Cauchy('hits', alpha = alpha, beta = beta, value = h, observed=True)

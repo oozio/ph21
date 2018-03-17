@@ -7,7 +7,7 @@
 \usepackage{float}
 \usepackage{wrapfig}	
 %opening
-\title{PH21 Assignment 4 Report}
+\title{PH21 Assignment 4 Report     updated last section}
 \author{Helen Xue}
 
 \begin{document}
@@ -88,10 +88,10 @@
 
 \par This time, with a more complicated situation, the true value is much harder to pin down with the same number of trials. The peaks are generally much wider; we still see them narrow as n increases.
 
-\par The mean is not a good estimator since the Central Limit Theorem doesn't apply to Cauchy distributions, 
+\par The mean is not a good estimator since the Central Limit Theorem doesn't apply to Cauchy distributions.
 
 \newpage
-\section{Lighthouse, neither alpha nor beta known}
+\section{Lighthouse, neither alpha nor beta known: updated}
 \par When we know neither a nor b, we can still use this technique to generate a heatmap of likelihoods by using the same prior twice for a and b; here $a=1.0$, $b=1.5$, and a is on the x axis, and b is on the y axis.
 
 \par Results for different n:
@@ -107,6 +107,22 @@
 	\endminipage \hfill
 	\minipage{0.32\textwidth}
 	\includegraphics[width=\linewidth]{lighthouse/2d/unif_n=4}
+	\caption{uniform} 
+	\endminipage \hfill
+\end{figure}
+
+\par n=16
+\begin{figure}[H]
+	\minipage{0.32\textwidth}
+	\includegraphics[width=\linewidth]{lighthouse/2d/gauss_1sigma_n=16}
+	\caption{gauss, within 1 sigma}  
+	\endminipage \hfill
+	\minipage{0.32\textwidth}
+	\includegraphics[width=\linewidth]{lighthouse/2d/gauss_3sigma_n=16}
+	\caption{gauss, within 3 sigma} 
+	\endminipage \hfill
+	\minipage{0.32\textwidth}
+	\includegraphics[width=\linewidth]{lighthouse/2d/unif_n=16}
 	\caption{uniform} 
 	\endminipage \hfill
 \end{figure}
@@ -142,5 +158,9 @@
 	\caption{uniform} 
 	\endminipage \hfill
 \end{figure}
+
+
+\par Updates: Previously, I'd only included one prior in the calculation instead of both. After fixing that and changing the extent of the plot to better bracket the data, we can see that the tight gaussian prior has narrow peaks (rings), and as we increase the sample size, the peak approaches our true $(alpha,beta)$ location.
+\par The wider gaussian did better than the uniform, but both look too broad to be very useful.
 
 \end{document}

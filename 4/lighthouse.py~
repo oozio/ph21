@@ -15,14 +15,24 @@ def lighthouse_prob(hits,a,b,prior):
      logHD = (np.sum(np.log((b/(2*np.pi))/((h - a)**2 + b**2))) + np.log(prior))
      return logHD
 
+def twoprior_prob(hits,a,b,spread):
+     logHD = (np.sum(np.log((b/(2*np.pi))/((h - a)**2 + b**2))) + np.log(prior(a,spread))+np.log(prior(b,spread)))
+     return logHD
+
+def prior(true,spread):
+     if spread == 0:
+          return 1.
+     prior = np.exp( -(true-1.5)**2 / (2. * spread**2) )
+     return prior
+     
+     
    
 a = 1.
 b = 1.5
 true_prob = 0.4
-prior = 1
+
 points =100
 
-prior = np.exp( -(true_prob-1.5)**2 / (2 * 0.1**2) )
 
 #for n in [2**n for n in range(0,10,2)]:   
 #     h = hit(n,a,b)
@@ -35,18 +45,17 @@ prior = np.exp( -(true_prob-1.5)**2 / (2 * 0.1**2) )
 #plt.savefig('unif.png')
 #plt.show()     
 
-
-for n in [2**n for n in range(0,10,2)]:    
+spread = 0.1
+for n in [2**n for n in range(0,10,2)]:
      h = hit(n,a,b)
      x = np.arange(0., 2., 2. / points)
      x1 = np.arange(0.,2.,2./points)
-     posteriors = [[lighthouse_prob(len(h),p,p1,prior) for p in x] for p1 in x1]
+     posteriors = [[twoprior_prob(len(h),p,p1,spread) for p in x] for p1 in x1]
      posteriors -= np.max(posteriors) 
      i = plt.imshow(posteriors,extent=[0.0, 2.0, 0.0, 2.0])
-     i.set_cmap('rainbow')
- #    plt.ylim(0,2)
+     plt.set_cmap('RdYlGn')
      plt.colorbar()
-     plt.savefig('gauss_1sigma_n='+str(n)+'.png')     
+     plt.savefig('gauss_3sigma_n='+str(n)+'.png')     
   #   display.clear_output(wait=True)
      plt.figure().clear()
 # The mean is not a good estimator since the Central Limit Theorem doesn't apply to Cauchy distributions, 

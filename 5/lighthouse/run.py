@@ -3,7 +3,7 @@ import model
 
 
 M = pymc.MCMC(model)
-M.sample(iter = 10000, burn = 0, thin = 1)
+M.sample(iter = 100000, burn = 8000, thin = 80)
 pymc.Matplot.plot(M)
-M.pa.summary()
-M.pb.summary()
+M.alpha.summary()
+M.beta.summary()
